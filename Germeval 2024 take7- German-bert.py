@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
 
 
 from transformers import BertTokenizer, BertForSequenceClassification, AdamW
@@ -16,7 +15,7 @@ import json
 import re
 
 # Load the pre-trained BERT tokenizer
-tokenizer = BertTokenizer.from_pretrained('bert-base-german-cased')
+tokenizer = BertTokenizer.from_pretrained('bert-base-german-cased') # tokenizer name should be the same for Classifier. In this case we use bert base german cased
 # max_len = 128
 
 
@@ -201,8 +200,8 @@ def preprocess_labels(df):
 
 
 # Define the path to the JSONL file
-file_train = r"C:\Users\kaoda\Desktop\PHD\Dataset-GERMEVAL 2024\germeval-competition-traindev.jsonl"
-file_test =r"C:\Users\kaoda\Desktop\PHD\Dataset-GERMEVAL 2024\germeval-competition-test.jsonl"
+file_train = r"germeval-competition-traindev.jsonl" #training data
+file_test =r"germeval-competition-test.jsonl" #taest data file diretory 
 
 # Process the file and create the DataFrame
 df = process_jsonl_file(file_train)
@@ -220,8 +219,6 @@ for d in annotator_dfs2:
     # preprocess_labels(annotator_dfs[d])
     annotator_dfs2[d].pop('annotator')
 
-
-# In[ ]:
 
 
 #test set has the same annotators as the training set
@@ -344,15 +341,6 @@ for annotator, df in train_dfs.items():
     train_dfs[annotator]['predictions'] = train_preds
 
 
-# In[85]:
-
-
-train_result
-
-
-# In[7]:
-
-
 # Training data evaluation metrics
 
 # Initialize the final data structure
@@ -465,13 +453,6 @@ print(f'disagree_bin_recall: {disagree_bin_f1}')
 print(f'disagree_bin_F1 Score: {disagree_bin_f1}')
 
 
-# In[130]:
-
-
-train_dfs
-
-
-# In[8]:
 
 
 # Initialize the final data structure
@@ -501,20 +482,6 @@ result = pd.DataFrame([{
 # print(result)
 result
 
-
-# In[93]:
-
-
-df2
-
-
-# In[95]:
-
-
-len(df2['id'].unique())
-
-
-# In[9]:
 
 
 from collections import Counter
@@ -546,8 +513,6 @@ result['multi_maj'] = result['multi_maj'].apply(convert_label)
 result
 
 
-# In[14]:
-
 
 multi_maj = lambda predictions: (lambda count: (lambda max_count: [label for label, freq in count.items() if freq == max_count][0])
                                  (max(count.values()))) (Counter(predictions))
@@ -559,8 +524,6 @@ result['multi_maj2'] = result['multi_maj2'].apply(convert_label)
 result
 
 
-# In[22]:
-
 
 # Check if the 'multi_maj' column is equal to 'multi_maj2' column for all rows
 if (result['multi_maj'] == result['multi_maj2']).all()==True:
@@ -569,7 +532,6 @@ else:
     print(False)
 
 
-# In[21]:
 
 
 # Function to predict the majority label with specific rules for evaluation
@@ -599,19 +561,10 @@ result['multi_maj2'] = result['multi_maj2'].apply(convert_label)
 result
 
 
-# In[124]:
 
 
 Counter(result.iloc[4]['predictions']).most_common(1)[0]
 
-
-# In[30]:
-
-
-result.tail(20)
-
-
-# In[10]:
 
 
 # Pop the columns
@@ -621,14 +574,6 @@ submission_1 = result[['id', 'bin_maj', 'bin_one','bin_all','multi_maj','disagre
 tsv_file_path = r'C:\Users\kaoda\Desktop\PHD\Dataset-GERMEVAL 2024\Bert_german_1.tsv'
 submission_1.to_csv(tsv_file_path, sep='\t', index=False)
 
-
-# In[ ]:
-
-
-
-
-
-# In[12]:
 
 
 sub2_result=result.copy()
@@ -667,9 +612,6 @@ for index, row in sub2_result.iterrows():
     sub2_result.at[index, 'dist_multi_3'] = dist_multi_3
     sub2_result.at[index, 'dist_multi_4'] = dist_multi_4
 sub2_result
-
-
-# In[13]:
 
 
 # Pop the columns
