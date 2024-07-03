@@ -1,36 +1,20 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[ ]:
 
-
-
-
-
-# In[6]:
 
 
 #!pip install transformers torch scikit-learn tqdm pandas numpy regex
 
 
-# In[2]:
-
-
 #!pip install transformers torch
-
-
-# In[7]:
-
 
 import torch
 device = torch.device("cuda")
 torch.cuda.is_available()
 
 
-# In[8]:
-
-
-from transformers import BertTokenizer, BertForSequenceClassification, AdamW,AutoTokenizer,AutoModelForTokenClassification,AutoModelForMaskedLM
+from transformers import BertTokenizer, BertForSequenceClassification, AdamW, #AutoTokenizer,AutoModelForTokenClassification,AutoModelForMaskedLM
 import torch
 from torch.utils.data import DataLoader, Dataset
 from sklearn.model_selection import train_test_split
@@ -44,7 +28,7 @@ import torch.nn.functional as F
 
 # Load the pre-trained BERT tokenizer
 #tokenizer = BertTokenizer.from_pretrained('distilbert-base-german-cased')
-tokenizer = BertTokenizer.from_pretrained('deepset/gbert-base')
+tokenizer = BertTokenizer.from_pretrained('deepset/gbert-base')  #Model does not matter as long as it is on hugginface
 # tokenizer = AutoTokenizer.from_pretrained('FacebookAI/xlm-roberta-large-finetuned-conll03-german')
 # max_len = 128
 
@@ -84,7 +68,6 @@ class ExtremismDataset(Dataset):
         return item
 
 
-# In[9]:
 
 
 # Function to train a BERT model for a single annotator
@@ -178,8 +161,6 @@ def train_bert_model(train_loader, val_loader ,patience=3):
     return model
 
 
-# In[10]:
-
 
 # 'load data'
 # Function to read the JSONL file and process the data
@@ -265,8 +246,6 @@ def preprocess_labels(df):
 # Display the DataFrame
 
 
-# In[12]:
-
 
 # Define the path to the JSONL file
 file_train = r"files/germeval-competition-traindev.jsonl"
@@ -287,9 +266,6 @@ for d in annotator_dfs:
 for d in annotator_dfs2:    
     # preprocess_labels(annotator_dfs[d])
     annotator_dfs2[d].pop('annotator')
-
-
-# In[13]:
 
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -344,10 +320,6 @@ for annotator, df in annotator_dfs.items():
     all_text_ids[annotator].extend(test_df[annotator]['id'])
     
 
-
-# In[14]:
-
-
 train_dfs= annotator_dfs.copy()
 # Evaluate the model on the training set
 for annotator, df in train_dfs.items():
@@ -369,9 +341,6 @@ for annotator, df in train_dfs.items():
             
     # Store predictions
     train_dfs[annotator]['predictions'] = train_preds
-
-
-# In[15]:
 
 
 # Training data evaluation metrics
@@ -496,10 +465,6 @@ total_ss=numpy.mean(total_s)
 
 print(f'final_f1_score:  {total_ss}')
 
-
-# In[16]:
-
-
 # Initialize the final data structure for test set
 final_data = {}
 
@@ -528,7 +493,6 @@ result = pd.DataFrame([{
 result
 
 
-# In[17]:
 
 
 from collections import Counter
@@ -565,7 +529,6 @@ result['multi_maj'] = result['multi_maj'].apply(convert_label)
 result
 
 
-# In[18]:
 
 
 # Pop the columns
