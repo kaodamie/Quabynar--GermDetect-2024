@@ -1,10 +1,9 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
-
 
 # !pip install openai
+
 from openai import OpenAI
 import pandas as pd
 from collections import defaultdict
@@ -95,13 +94,9 @@ def preprocess_labels(df):
 
 # Display the DataFrame
 
-
-# In[2]:
-
-
 # Define the path to the JSONL file
-file_train = r"C:\Users\kaoda\Desktop\PHD\Dataset-GERMEVAL 2024\germeval-competition-traindev.jsonl"
-file_test =r"C:\Users\kaoda\Desktop\PHD\Dataset-GERMEVAL 2024\germeval-competition-test.jsonl"
+file_train = r"germeval-competition-traindev.jsonl" #define training file directory
+file_test =r"C:\germeval-competition-test.jsonl" #define test set file directory
 # files/germeval-competition-test.jsonl
 # Process the file and create the DataFrame
 df = process_jsonl_file(file_train)
@@ -123,7 +118,7 @@ for d in annotator_dfs2:
 # In[3]:
 
 
-client = OpenAI(api_key = 'sk-proj-e0qJ5dbTiqsqDxu9VzggT3BlbkFJRIxLl5vAdZyxOCdMDSZK')
+client = OpenAI(api_key = 'Place your token here')
 
 def format_few_shot_prompt(examples, max_examples=10):
     prompt = "The following texts are in German. Assign a label from 0 (not offensive) to 4 (most offensive):\n\n"
@@ -159,11 +154,7 @@ def generate_prediction(text, few_shot_prompt, max_tokens=100):
         prediction = None
 
     return prediction
-
-
-# In[5]:
-
-
+    
 # Initialize a new dictionary to store predictions
 predictions_dict = {}
 
@@ -191,9 +182,6 @@ combined_predictions = pd.concat(annotator_dfs2.values(), keys=annotator_dfs2.ke
 combined_predictions
 
 
-# In[ ]:
-
-
 # for annotator, dfs in annotator_dfs2.items():
 #     for i in range(len(annotator_dfs2[annotator]['prediction'])):
 #    # annotator_dfs2[annotator]['prediction']= annotator_dfs2[annotator]['prediction']==5
@@ -201,15 +189,8 @@ combined_predictions
 #            print(annotator_dfs2[annotator]['prediction'][i])
 
 
-# In[11]:
-
-
 for a, dfs in annotator_dfs2.items():
     annotator_dfs2[a]=annotator_dfs2[a].fillna(0)
-
-
-# In[13]:
-
 
 # Initialize the final data structure for test set
 final_data = {}
@@ -237,10 +218,6 @@ result = pd.DataFrame([{
 
 # print(result)
 result
-
-
-# In[14]:
-
 
 from collections import Counter
 #Function to compute majority vote
@@ -275,20 +252,12 @@ result['multi_maj'] = result['multi_maj'].apply(convert_label)
 # print(preds_df)
 result
 
-
-# In[15]:
-
-
 # Pop the columns
 submission_1 = result[['id', 'bin_maj', 'bin_one','bin_all','multi_maj','disagree_bin']]
 
 # Save to TSV file
 tsv_file_path = r'C:\Users\kaoda\Desktop\PHD\Dataset-GERMEVAL 2024\germeval_aproach_LLAMA3_5.tsv'
 submission_1.to_csv(tsv_file_path, sep='\t', index=False)
-
-
-# In[16]:
-
 
 sub2_result=result.copy()
 
@@ -328,13 +297,13 @@ for index, row in sub2_result.iterrows():
 sub2_result
 
 
-# In[17]:
+
 
 
 # Pop the columns
 submission_2 = sub2_result[['id', 'dist_bin_0', 'dist_bin_1','dist_multi_0','dist_multi_1','dist_multi_2','dist_multi_3','dist_multi_4']]
 
 # Save to TSV file
-tsv_file_path = r'C:\Users\kaoda\Desktop\PHD\Dataset-GERMEVAL 2024\Germeval_sub2LLAMA3.tsv'
+tsv_file_path = r'filename.tsv'
 submission_2.to_csv(tsv_file_path, sep='\t', index=False)
 
