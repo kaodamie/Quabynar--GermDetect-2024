@@ -1,0 +1,5 @@
+The source code in this repository is licensed under the MIT License. See the [LICENSE](./LICENSE) file for more details.
+
+Non-code assets, such as images and documentation, are licensed under the Creative Commons Attribution 4.0 International License. See the [LICENSE-CC](./LICENSE-CC) file for more details.
+
+[![CC BY 4.0](https://licensebuttons.net/l/by/4.0/88x31.png)](https://creativecommons.org/licenses/by/4.0/)
